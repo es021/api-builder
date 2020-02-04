@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Example Client</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:4040/graphql", true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+        // send the collected data as JSON
+        xhr.send(JSON.stringify({
+            query : `query { companies {ID name}}`
+        }));
+        xhr.onloadend = function () {
+            console.log(JSON.parse(xhr.response))
+        };
+    </script>
+
+</body>
+
+</html>
