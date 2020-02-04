@@ -11,6 +11,4 @@ const Secret = {
 };
 
 
-module.exports = {
-    Secret
-}
+module.exports = Secret

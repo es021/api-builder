@@ -1,7 +1,9 @@
 const connect = require("connect");
 const query = require("qs-middleware");
-const MainBuilder = require("./lib/MainBuilder");
+const ApiBuilder = require("./lib/ApiBuilder");
+const { jwtAuthentication } = require("./lib/Authentication");
 const DB = require("./lib/DB");
+const bodyParser = require('body-parser');
 
 const PORT = "4040";
 const GRAPHQL_PATH = "/graphql";
@@ -40,9 +42,17 @@ const ATTR_FOREIGN = {
 
 var app = connect();
 app.use(query());
-var db = new DB("DEV", DATABASE_NAME);
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(jwtAuthentication({
+  PORT: PORT,
+  GRAPHQL_PATH: GRAPHQL_PATH
+}));
 
-const builder = new MainBuilder({
+const db = new DB("DEV", DATABASE_NAME);
+const apiBuilder = new ApiBuilder({
   db: db,
   databaseName: DATABASE_NAME,
   additionalAttrForeign: ATTR_FOREIGN,
@@ -55,6 +65,6 @@ const builder = new MainBuilder({
     );
   }
 });
-builder.init();
+apiBuilder.init();
 
 
